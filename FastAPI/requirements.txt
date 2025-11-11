@@ -7,3 +7,11 @@ bcrypt==4.0.1
 python-jose
 python-multipart
 PyMuPDF
+langchain
+langchain-core
+langchain-text-splitters
+langchain_experimental
+langchain-huggingface
+sentence_transformers 
+nltk
+chromadb

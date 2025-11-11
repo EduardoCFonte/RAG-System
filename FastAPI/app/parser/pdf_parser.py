@@ -1,7 +1,11 @@
 import fitz 
 import sys
 from fastapi import File, UploadFile
-
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+import nltk
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_huggingface import HuggingFaceEmbeddings
 
 
 class pdf_parser:
@@ -27,6 +31,15 @@ class pdf_parser:
             print("trying")
             doc.close()
             complete_pdf = "\n".join(full_pdf)
+            self.chunk_op(complete_pdf)
 
-        # print(complete_pdf)
         return complete_pdf
+    
+    def chunk_op(self, complete_pdf: list):
+        splitter = RecursiveCharacterTextSplitter(chunk_size=2200,
+                                                  chunk_overlap=50,
+                                                  length_function=len,
+                                                  separators=["Art.","\n\n", "\n", ". ", " ", ""])
+        
+        chunks = splitter.split_text(complete_pdf)
+        return chunks
