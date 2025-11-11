@@ -17,19 +17,13 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/login")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verifica se a senha em texto puro corresponde ao hash salvo."""
     return pwd_context.verify(plain_password, hashed_password)
 
 def get_password_hash(password: str) -> str:
-    """Gera o hash de uma senha em texto puro."""
     return pwd_context.hash(password)
 
 
 def create_token(data: dict, expires_delta: Optional[timedelta] = None):
-    """
-    Cria um novo token de acesso (JWT).
-    'data' deve conter as informações a serem codificadas (ex: {'sub': user_email}).
-    """
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -45,10 +39,6 @@ async def get_current_user(
     token: str = Depends(oauth2_scheme), 
     db: Session = Depends(get_db)
 ) -> models.User:
-    """
-    Dependência para obter o utilizador atual a partir de um token JWT.
-    Valida o token e busca o utilizador no banco de dados.
-    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Não foi possível validar as credenciais",
@@ -61,7 +51,6 @@ async def get_current_user(
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
-        #token_data = schemas.TokenData(email=email) 
     except JWTError:
         raise credentials_exception
         
