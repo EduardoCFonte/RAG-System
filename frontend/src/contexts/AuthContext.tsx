@@ -48,21 +48,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     delete api.defaults.headers.common['Authorization'];
   };
 
-  const useUserProfile = () => {
-    const { token } = useAuth(); 
-    return useQuery({
-      queryKey: ['userProfile', token], 
-      queryFn: async () => {
-        const config = { headers: { Authorization: `Bearer ${token}` } };
-        const { data } = await api.get('/api/v1/users/me', config);
-        return data; 
-      },
-      enabled: !!token, 
-      retry: false, 
-      staleTime: Infinity, 
-    });
-  };
-
   const value = { token, user, login, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
