@@ -14,11 +14,6 @@ async def parse_documents(files: list[UploadFile] = File(...), request: Request 
     """
     Endpoint de login. Recebe email e senha e retorna um token de acesso.
     """
-    print("---------------------------------")
-    print("CABEÇALHOS RECEBIDOS NO BACKEND:")
-    print(request.headers)
-    print("---------------------------------")
-    print(files)
     parser_instance = parser.pdf_parser()
     textos_dos_pdfs = await parser_instance.read_pdf(files)
     return {"access_token": "poooo", "token_type": "bearer"}
