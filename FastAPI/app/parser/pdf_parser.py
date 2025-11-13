@@ -5,23 +5,20 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from app.core.ml_model import ml_models
 from app.core.load_env import settings
+import os
 
-class pdf_parser:
+class pdf_parser(ml_models):
     def __init__(self):
-        self.embeddings_model = ml_models.get("embeddings_model")
-        if self.embeddings_model is None:
-            raise RuntimeError("Embedding model not .")
+        super().__init__() 
+        self.state = {}
         self.splitter = RecursiveCharacterTextSplitter(chunk_size=2200,
                                                   chunk_overlap=50,
                                                   length_function=len,
                                                   separators=["Art.","\n\n", "\n", ". ", " ", ""])
-        self.vector_store = Chroma(
-            persist_directory=settings.CHROMA_DB_PATH,
-            embedding_function=self.embeddings_model 
-        )
     
-    async def read_pdf(self, files: list[UploadFile] = File(...)):
-
+    async def read_pdf(self, email: str, files: list[UploadFile] = File(...)):
+    
+        vector_store = self._get_vector_store(email)
         all_chunks = []
 
         for file in files:
@@ -47,7 +44,7 @@ class pdf_parser:
             print("Nenhum chunk de texto foi gerado.")
             return
 
-        self.vector_store.add_texts(texts=all_chunks)
+        vector_store.add_texts(texts=all_chunks)
 
         print("Documentos processados e armazenados.")
         return
@@ -55,3 +52,13 @@ class pdf_parser:
     def chunk_op(self, complete_pdf: list):
         chunks = self.splitter.split_text(complete_pdf)
         return chunks
+    
+    def _get_vector_store(self, email:str):
+        pasta_email = os.path.join(settings.CHROMA_DB_PATH, email)
+        vector_store = Chroma(
+            persist_directory=pasta_email,
+            embedding_function=self.embedded_models
+        )
+        return vector_store
+
+parser = pdf_parser()
