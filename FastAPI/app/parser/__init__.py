@@ -1,1 +1,1 @@
-from .pdf_parser import pdf_parser
+from .pdf_parser import parser

@@ -11,24 +11,15 @@ from contextlib import asynccontextmanager
 import nltk
 from langchain_huggingface import HuggingFaceEmbeddings
 
-# Importe o nosso "armazém" de modelos
 from .core.ml_model import ml_models
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("A iniciar a aplicação...")
-    print("A descarregar o modelo 'punkt' do NLTK...")
-    nltk.download('punkt')
-    
-    print("A carregar o modelo de embedding (ex: 'all-MiniLM-L6-v2')...")
-    ml_models["embeddings_model"] = HuggingFaceEmbeddings(
-    model_name="all-MiniLM-L6-v2",
-    model_kwargs = {'device': 'cuda'} 
-)
-    print("Modelo de embedding carregado com sucesso!")
 
     yield
-    ml_models.clear()
+    print("tchau")
+
 
 app = FastAPI(title="Minha API de Exemplo", lifespan=lifespan)
 
