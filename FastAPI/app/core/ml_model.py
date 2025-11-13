@@ -6,10 +6,18 @@ class ml_models:
     def __init__(self):
         nltk.download('punkt')
         print("A carregar o modelo de embedding (ex: 'all-MiniLM-L6-v2')...")
-        self.embedded_models = HuggingFaceEmbeddings(
-        model_name="all-MiniLM-L6-v2",
-        model_kwargs = {'device': 'cuda'} 
-        )
+        try:
+            self.embedded_models = HuggingFaceEmbeddings(
+                model_name="all-MiniLM-L6-v2",
+                model_kwargs = {'device': 'cuda'} 
+            )
+            print("Model load with GPU")
+        except Exception as e:
+            self.embedded_models = HuggingFaceEmbeddings(
+                model_name="all-MiniLM-L6-v2",
+                model_kwargs = {'device': 'cpu'}
+            )
+            print("Model was load with CPU unfortunately")
     
 
 
