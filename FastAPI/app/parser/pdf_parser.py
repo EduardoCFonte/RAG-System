@@ -16,9 +16,9 @@ class pdf_parser(ml_models):
                                                   length_function=len,
                                                   separators=["Art.","\n\n", "\n", ". ", " ", ""])
     
-    async def read_pdf(self, email: str, files: list[UploadFile] = File(...)):
+    async def read_pdf(self, email: str, context:str, files: list[UploadFile] = File(...)):
     
-        vector_store = self._get_vector_store(email)
+        vector_store = self._get_vector_store(email,context)
         all_chunks = []
 
         for file in files:
@@ -53,8 +53,8 @@ class pdf_parser(ml_models):
         chunks = self.splitter.split_text(complete_pdf)
         return chunks
     
-    def _get_vector_store(self, email:str):
-        pasta_email = os.path.join(settings.CHROMA_DB_PATH, email)
+    def _get_vector_store(self, email:str, context:str):
+        pasta_email = os.path.join(settings.CHROMA_DB_PATH, email,context)
         vector_store = Chroma(
             persist_directory=pasta_email,
             embedding_function=self.embedded_models
