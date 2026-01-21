@@ -59,7 +59,6 @@ const FileUpload: React.FC = () => {
       await api.post("/api/v1/upload-documents", formData);
 
       alert(`Sucesso! Documentos processados no contexto: ${contextName}`);
-
       setAcceptedFiles([]);
       setFileRejections([]);
       setContextName('');
