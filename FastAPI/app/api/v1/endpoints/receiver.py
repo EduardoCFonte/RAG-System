@@ -10,32 +10,8 @@ from app.parser.pdf_parser import parser
 
 router = APIRouter()
 
-async def get_current_user_email(request: Request) -> str:
-    auth_header = request.headers.get("Authorization")
-    if not auth_header or not auth_header.startswith("Bearer "):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token de autenticação ausente ou inválido",
-        )
-    
-    token = auth_header.split(" ")[1]
-    try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token inválido: campo 'sub' ausente",
-            )
-        return email
-    except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Não foi possível validar as credenciais",
-        )
-
 @router.post("/upload-documents", response_model=schemas.UploadSuccess)
-async def parse_documents(context: str = Form(...),files: list[UploadFile] = File(...), email: str = Depends(get_current_user_email),db: Session = Depends(get_db)):
+async def parse_documents(context: str = Form(...),files: list[UploadFile] = File(...), email: str = Depends(services.get_current_user_email),db: Session = Depends(get_db)):
     """
     Endpoint que receber os PDFs
     """
