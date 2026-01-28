@@ -9,3 +9,5 @@ from .user_register import UserPublic
 from .uploadSuccess import UploadSuccess
 
 from .contextsList import ContextsList
+
+from .chatHistory import chatHistory

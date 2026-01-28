@@ -9,7 +9,7 @@ import api from '../../services/api';
 
 interface SidebarProps {
   onAddContext: () => void;
-  onSelectContext: (id: string) => void;
+  onSelectContext: (id: string, history: any[]) => void;
   activeContextId: string | null;
 }
 
@@ -44,13 +44,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onAddContext, onSelectContext, active
 
   const handleContextClick = async (ctxId: string) => {
     try {
-      await api.post('/api/v1/contexts/select', { 
-        context_name: ctxId 
-      });
-      onSelectContext(ctxId);
+      const response = await api.get(`/api/v1/contexts/select/${ctxId}`);
+      
+      const history = response.data.messages || [];
+
+      onSelectContext(ctxId, history);
+  
     } catch (error) {
-      console.error("Erro ao notificar backend sobre seleção de contexto:", error);
-      onSelectContext(ctxId); 
+      console.error("Erro ao buscar histórico do contexto:", error);
+      onSelectContext(ctxId, []); 
     }
   };
 
