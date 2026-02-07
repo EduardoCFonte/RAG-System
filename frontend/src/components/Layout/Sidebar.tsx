@@ -47,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onAddContext, onSelectContext, active
       const response = await api.get(`/api/v1/contexts/select/${ctxId}`);
       
       const history = response.data.messages || [];
-
+      console.log(history, "resposta Context")
       onSelectContext(ctxId, history);
   
     } catch (error) {
