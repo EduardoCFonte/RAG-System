@@ -1,11 +1,12 @@
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime, ForeignKey, Text, UniqueConstraint, Integer
+from sqlalchemy import Column, String, DateTime, ForeignKey, Text, UniqueConstraint, Integer, JSON
 from sqlalchemy.orm import relationship
 from app.core.database import Base 
+from app import models
 
 class Chat(Base):
     """
-    Representa o cabeçalho de uma conversa entre um usuário e um contexto.
+    Chat between an user and context
     """
     __tablename__ = "chat"
 
@@ -13,6 +14,7 @@ class Chat(Base):
     user_email = Column(String, index=True, nullable=False)
     context_name = Column(String, index=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    files = Column(JSON, nullable=True, default=[])
 
 
     __table_args__ = (
@@ -23,7 +25,7 @@ class Chat(Base):
 
 class Message(Base):
     """
-    Representa cada mensagem individual dentro de uma conversa (Chat).
+    Represent each message individually
     """
     __tablename__ = "messages"
 
