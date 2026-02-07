@@ -2,6 +2,7 @@ TokenGitHub.txt
 FastAPI/venv/*
 *.env
 FastAPI/chroma_db_stores/*
+.vscode
 
 __pycache__/
 *.pyc
