@@ -55,6 +55,8 @@ class pdf_parser(ml_models):
     
     def _get_vector_store(self, email:str, context:str):
         pasta_email = os.path.join(settings.CHROMA_DB_PATH, email,context)
+        if(os.path.exists(pasta_email)):
+            print("Ja existe")
         vector_store = Chroma(
             persist_directory=pasta_email,
             embedding_function=self.embedded_models

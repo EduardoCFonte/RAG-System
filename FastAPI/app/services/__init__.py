@@ -7,3 +7,5 @@ from .user_service import get_user_by_email
 from .get_user_email import get_current_user_email
 
 from .ChromaSearcher import GetChromaContext
+
+from .context_service import context_service

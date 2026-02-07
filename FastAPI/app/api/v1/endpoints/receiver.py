@@ -16,6 +16,15 @@ async def parse_documents(context: str = Form(...),files: list[UploadFile] = Fil
     Endpoint que receber os PDFs
     """
     try:
+        payload_contexto = schemas.createContext(
+            email=email,
+            context=context,
+            files=[f.filename for f in files]
+        )
+        
+        
+        chat_record = services.context_service(db, payload_contexto)
+
         await parser.read_pdf(email=email, context=context, files=files)
         
         return {
