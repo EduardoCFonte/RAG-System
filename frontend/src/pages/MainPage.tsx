@@ -4,9 +4,11 @@ import Sidebar from '../components/Layout/Sidebar';
 
 const MainPage: React.FC = () => {
   const [activeContextId, setActiveContextId] = useState<string | null>(null);
+  const [chatHistory, setChatHistory] = useState<any[]>([]);
 
-  const handleSelectContext = (id: string) => {
-    setActiveContextId(id);
+  const handleSelectContext = (id: string | null, history: any[]) => {
+    setActiveContextId(id);  
+    setChatHistory(history);   
   };
 
   const handleAddContext = () => {

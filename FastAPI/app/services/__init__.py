@@ -9,3 +9,5 @@ from .get_user_email import get_current_user_email
 from .ChromaSearcher import GetChromaContext
 
 from .context_service import context_service
+
+from .context_service import context_delete
