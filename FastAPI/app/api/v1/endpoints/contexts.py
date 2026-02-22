@@ -19,7 +19,7 @@ async def read_users_me(request: Request, db: Session = Depends(get_db)):
 @router.get("/contexts/select/{ctx_id}", response_model=schemas.chatHistory) 
 async def post_contexts(ctx_id:str, request: Request, db: Session = Depends(get_db)):
     email = await services.get_current_user_email(request)
-    folder_names = services.GetChromaContext(db,email)
+    folder_names = await services.GetChromaContext(db,email)
 
     if ctx_id not in folder_names:
         raise HTTPException(
