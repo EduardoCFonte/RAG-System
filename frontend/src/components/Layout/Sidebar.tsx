@@ -9,13 +9,20 @@ import {
 import api from '../../services/api';
 
 interface SidebarProps {
+  contexts: any[];
+  setContexts: React.Dispatch<React.SetStateAction<any[]>>;
   onAddContext: () => void;
   onSelectContext: (id: string | null, history: any[]) => void;
   activeContextId: string | null;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onAddContext, onSelectContext, activeContextId }) => {
-  const [contexts, setContexts] = useState<any[]>([]);
+const Sidebar: React.FC<SidebarProps> = ({
+  contexts,
+  setContexts,
+  onAddContext,
+  onSelectContext,
+  activeContextId
+}) => {
 
   useEffect(() => {
     const fetchContexts = async () => {
@@ -62,12 +69,13 @@ const Sidebar: React.FC<SidebarProps> = ({ onAddContext, onSelectContext, active
     if (!confirmed) return;
 
     try {
-      await api.delete(`/api/v1/contexts/${ctxId}`);
-
+      const response = await api.delete(`/api/v1/contexts/${ctxId}`);
+      console.log("DELETE RESPONSE:", response.data.message);
       setContexts(prev => prev.filter(c => c.id !== ctxId));
       if (activeContextId === ctxId) {
         onSelectContext(null, []);
       }
+      console.log("tudOk")
     } catch (error) {
       console.error("Erro ao deletar contexto:", error);
     }

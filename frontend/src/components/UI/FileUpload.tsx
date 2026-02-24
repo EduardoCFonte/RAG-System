@@ -11,7 +11,11 @@ interface ApiService {
   post: (url: string, data: FormData) => Promise<{ data: { success: boolean } }>;
 }
 
-const FileUpload: React.FC = () => {
+interface FileUploadProps {
+  setContexts: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
+const FileUpload: React.FC<FileUploadProps> = ({ setContexts }) => {
   const [acceptedFiles, setAcceptedFiles] = useState<UploadedFile[]>([]);
   const [fileRejections, setFileRejections] = useState<FileRejection[]>([]);
   const [contextName, setContextName] = useState<string>('');
@@ -62,6 +66,26 @@ const FileUpload: React.FC = () => {
       setAcceptedFiles([]);
       setFileRejections([]);
       setContextName('');
+      const response = await api.get("/api/v1/contexts");
+
+      const rawData = Array.isArray(response.data)
+        ? response.data
+        : response.data.ContextsList;
+
+      if (rawData) {
+        const formatted = rawData.map((item: any) => {
+          const id = typeof item === 'string' ? item : item.id;
+          const displayName = typeof item === 'string'
+            ? item
+            : (item.name || item.id);
+
+          return {
+            id: id,
+            name: displayName.replace(/_/g, ' ')
+          };
+        });
+        setContexts(formatted);
+      }
     } catch (error) {
       console.error("Erro ao enviar os ficheiros:", error);
       alert("Ocorreu um erro ao enviar os ficheiros para o servidor.");

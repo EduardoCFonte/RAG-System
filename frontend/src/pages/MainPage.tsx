@@ -5,6 +5,7 @@ import Sidebar from '../components/Layout/Sidebar';
 const MainPage: React.FC = () => {
   const [activeContextId, setActiveContextId] = useState<string | null>(null);
   const [chatHistory, setChatHistory] = useState<any[]>([]);
+  const [contexts, setContexts] = useState<any[]>([]);
 
   const handleSelectContext = (id: string | null, history: any[]) => {
     setActiveContextId(id);  
@@ -18,6 +19,8 @@ const MainPage: React.FC = () => {
   return (
     <div className="flex h-[calc(100vh-64px)] bg-gray-100 overflow-hidden font-sans">
       <Sidebar 
+        contexts={contexts}
+        setContexts={setContexts}
         activeContextId={activeContextId}
         onSelectContext={handleSelectContext}
         onAddContext={handleAddContext}
@@ -34,7 +37,7 @@ const MainPage: React.FC = () => {
           </div>
 
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <FileUpload />
+            <FileUpload setContexts={setContexts} />
           </div>
         </div>
       </main>
