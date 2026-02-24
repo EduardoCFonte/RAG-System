@@ -49,12 +49,12 @@ async def post_contexts(ctx_id:str, request: Request, db: Session = Depends(get_
         )
     
 
-@router.delete("/contexts/{ctx_id}", response_model=schemas.chatHistory) 
+@router.delete("/contexts/{ctx_id}", response_model=dict) 
 async def delete_context(ctx_id:str, request: Request, db: Session = Depends(get_db)):
     email = await services.get_current_user_email(request)
-    deleteCheck = services.context_delete(db,ctx_id,email)
+    deleteCheck = await services.context_delete(db,ctx_id,email)
 
     if deleteCheck:
-        return {"True is correct" , deleteCheck}
+        return {"True is correct" : deleteCheck}
     
-    return {"True is correct" , False}
+    return {"True is correct" : False}
