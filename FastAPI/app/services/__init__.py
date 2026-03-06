@@ -11,3 +11,5 @@ from .ChromaSearcher import GetChromaContext
 from .context_service import context_service
 
 from .context_service import context_delete
+
+#from .chat_service import chat_service
