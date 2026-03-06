@@ -47,8 +47,8 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
 
     try {
       const response = await api.post('/api/v1/chat', { 
-        context_id: contextId, 
-        message: input 
+        context_name: contextId, 
+        question: input 
       });
 
       const botMsg: Message = { role: 'assistant', content: response.data.answer };
