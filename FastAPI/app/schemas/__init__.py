@@ -13,3 +13,5 @@ from .contextsList import ContextsList
 from .chatHistory import chatHistory
 
 from .createContext import createContext
+
+from .chatRequest import ChatRequest

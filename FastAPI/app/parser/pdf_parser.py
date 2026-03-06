@@ -62,5 +62,11 @@ class pdf_parser(ml_models):
             embedding_function=self.embedded_models
         )
         return vector_store
+    
+    def search_context(self, email:str, context:str):
+        pasta_email = os.path.join(settings.CHROMA_DB_PATH, email,context)
+        if(os.path.exists(pasta_email)):
+            return pasta_email
+        return None
 
 parser = pdf_parser()
