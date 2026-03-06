@@ -40,7 +40,7 @@ async def post_contexts(ctx_id:str, request: Request, db: Session = Depends(get_
             models.Message.conversa_id == chat_registro.id
         ).order_by(models.Message.timestamp.asc()).all() 
 
-        return {"History": messages_all}
+        return {"chat": messages_all}
 
     except Exception as error:
         raise HTTPException(

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FileUpload from '../components/UI/FileUpload'; 
 import Sidebar from '../components/Layout/Sidebar';
+import ChatHistory from '../components/UI/Chat';
 
 const MainPage: React.FC = () => {
   const [activeContextId, setActiveContextId] = useState<string | null>(null);
@@ -25,21 +26,19 @@ const MainPage: React.FC = () => {
         onSelectContext={handleSelectContext}
         onAddContext={handleAddContext}
       />
-      <main className="flex-1 overflow-y-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-              Processador de Documentos
-            </h1>
-            <p className="mt-3 text-lg text-gray-600">
-              Selecione um contexto na barra lateral e envie seus PDFs para alimentar a base de conhecimento.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+      <main className="flex-1 flex flex-col h-full overflow-hidden p-6 md:p-10">
+        {activeContextId ? (
+          <ChatHistory 
+            contextId={activeContextId} 
+            messages={chatHistory}
+            setChatHistory={setChatHistory}
+            onBack={() => setActiveContextId(null)}
+          />
+        ) : (
+          <div className="h-full flex items-center justify-center">
             <FileUpload setContexts={setContexts} />
           </div>
-        </div>
+        )}
       </main>
     </div>
   );
