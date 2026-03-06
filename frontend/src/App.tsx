@@ -1,7 +1,7 @@
 import React from 'react';
 import {  Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext'; 
-
+import ProtectedRoute from './components/Auth/ProtectedRoute';
 import Header from './components/Layout/Header';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from "./pages/RegisterPage";
@@ -18,7 +18,9 @@ const App = () => {
               <Route path="/" element={<Navigate to="/login" />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              <Route path="/main" element={<MainPage/>}/>
+              <Route element={<ProtectedRoute/>}>
+                  <Route path="/main" element={<MainPage/>}/>
+              </Route>
             </Routes>
           </main>
         </div>

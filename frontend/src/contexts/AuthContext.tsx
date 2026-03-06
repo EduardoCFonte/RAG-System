@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import api from '../services/api'; 
 
@@ -11,6 +10,7 @@ interface User {
 interface AuthContextType {
   token: string | null;
   user: User | null;
+  loading: boolean;      
   login: (token: string) => Promise<void>;
   logout: () => void;
 }
@@ -18,26 +18,44 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('authToken'));
-
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true); 
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const savedToken = localStorage.getItem('authToken');
+      
+      if (savedToken) {
+        try {
+          api.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
+
+          const response = await api.get('/api/v1/users/me');
+          setUser(response.data);
+          setToken(savedToken);
+        } catch (error) {
+          console.error("Sessão expirada ou inválida");
+          logout(); 
+        }
+      }
+      
+      setLoading(false); 
+    };
+
+    initializeAuth();
+  }, []);
 
   const login = async (newToken: string) => {
-
-    setToken(newToken);
-    localStorage.setItem('authToken', newToken);
-
-    api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-
     try {
+      setToken(newToken);
+      localStorage.setItem('authToken', newToken);
+      api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
 
       const response = await api.get('/api/v1/users/me');
-      console.log(response)
-      setUser(response.data); 
+      setUser(response.data);
     } catch (error) {
-      console.error("Falha ao buscar dados do utilizador após o login:", error);
       logout();
+      throw error; 
     }
   };
 
@@ -48,7 +66,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     delete api.defaults.headers.common['Authorization'];
   };
 
-  const value = { token, user, login, logout };
+  const value = { 
+    token, 
+    user, 
+    loading, 
+    login, 
+    logout 
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -3,25 +3,23 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const ProtectedRoute: React.FC = () => {
-    const { token, user} = useAuth(); // Pergunta ao AuthContext: "Temos um token/utilizador?"
+    const { token, loading } = useAuth();
 
-    // Opcional: Adicionar um estado de carregamento para uma melhor UX
-    // const { isLoading } = useAuth();
-    // if (isLoading) {
-    //   return <div>A carregar...</div>; // Mostra um spinner enquanto verifica o token inicial
-    // }
+    if (loading) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-gray-50">
+                <div className="flex flex-col items-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                    <p className="mt-4 text-gray-600 font-medium">Validando sua sessão...</p>
+                </div>
+            </div>
+        );
+    }
 
-    // A lógica do segurança:
     if (!token) {
-        // Se NÃO houver token, redireciona para a página de login.
-        // O 'replace' evita que o utilizador possa usar o botão "Voltar" do navegador para
-        // voltar para a página protegida.
         return <Navigate to="/login" replace />;
     }
 
-    // Se houver um token, renderiza o componente da rota que está a ser protegido.
-    // O <Outlet /> é um placeholder que o react-router substitui pela página correta
-    // (ex: <DashboardPage />).
     return <Outlet />;
 };
 

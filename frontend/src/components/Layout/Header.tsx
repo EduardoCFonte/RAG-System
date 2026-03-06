@@ -3,7 +3,6 @@ import { HomeModernIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-// Um placeholder de logo mais adequado para um fundo claro
 const logoImobiliare = 'https://placehold.co/300x80/334155/ffffff?text=IMOBILIARE&font=raleway';
 
 const Header: React.FC = () => {
